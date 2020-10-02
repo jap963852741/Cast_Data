@@ -13,6 +13,7 @@ if __name__ == '__main__':
         File_name = File_name.replace(".csv","")
         result_dict = {}
         # [time:1600963200000, tradeDate:1600963200000, open:12168.00000, high:12234.00000, low:12157.00000, close:12206.00000, volume:9865, millionAmount:0.00]
+        print(File_name)
         with open('csv_to_txt\\'+File_name+'.csv', newline='') as csvfile:
             rows = csv.reader(csvfile)
             for index,row in enumerate(rows):
@@ -20,6 +21,8 @@ if __name__ == '__main__':
                     temp_date_list = row[0].split("/")
                     temp_date=""
                     for aa in temp_date_list:
+                        if aa == '\x1a':
+                            aa = str(ord(aa))
                         if int(aa)<10:
                             aa = '0'+aa
                         temp_date+=aa
@@ -27,7 +30,7 @@ if __name__ == '__main__':
 
                     if row[0] in result_dict:
                         pass
-                    else:
+                    elif len(temp_date) > 3:
                         # 只看月契約
                         if int(temp_date[4:6]) == 12:
                             nxt_month = str(int(temp_date[0:4])+1)+"01"
@@ -64,7 +67,7 @@ if __name__ == '__main__':
                 #     print(row)
         final_str = ""
         for key, value in result_dict.items():
-            print(key + ':' + str(value))
+            # print(key + ':' + str(value))
             final_str += str(value)+'\r'
             the_all_data += str(value)+'\r'
         with open('txt\\'+File_name+'.txt', 'w') as txt:
